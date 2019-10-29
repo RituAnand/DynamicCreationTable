@@ -1,0 +1,192 @@
+<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#ConditionTable').on('change', 'select.search_type', function (e) {
+            var selectedval = $(this).val();
+            $(this).closest('td').next().html(selectedval);
+        });
+
+         $('#FilterTable').on('change', 'select.Filter_search_type', function (e) {
+            var selectedval = $(this).val();
+            $(this).closest('td').next().html(selectedval);
+        });
+    });
+</script>
+
+
+ <label for="RuleAttr" style=" margin-top:15px">Filter Fields:</label>
+                                                    <div style="border:1px solid black;padding:20px;" id="FilterAttr" name="FilterAttr">
+                                                        <table id="FilterTable" border="1">
+                                                            <tr>
+                                                                <th>Filter Address</th>
+                                                                <th>Filter Name</th>
+                                                                <th>Filter Values</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select class="Filter_search_type" name="Filter_select_one">
+                                                                        <option value="Select one">Select one</option>
+                                                                        <option value="ActivityInstanceType">ActivityInstanceType</option>
+                                                                        <option value="ActivityCurrentStatus">ActivityCurrentStatus</option>
+                                                                        <option value="State">State</option>
+                                                                        <option value="LastMessage">LastMessage</option>
+                                                                        <option value="ActivityName">ActivityName</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td></td>
+
+                                                                <td><input type="text" class='FilterValues' size="8" /></td>
+
+                                                                <td>
+                                                                    <button type="button" onclick="deleteRow(this,'FilterField')">-</button>
+                                                                    <button type="button" onclick="insFilterRow()">+</button>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+
+                                                        <div class="row" style="margin-bottom: 15px; margin-top: 15px">
+                                                            <div class="col-md-6">
+                                                                <label for="SourceActivity">SourceActivity</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select id="SourceActivity" type="text" class="form-control" name="SourceActivity">
+                                                                    <option value="Select one">Select one</option>
+                                                                    <option value="parent">Parent</option>
+                                                                    <option value="childs">Child</option>
+                                                                    <option value="sibling">Sibling</option>
+                                                                    <option value="self">Self</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <label for="ConditionAttr" style=" margin-top:15px">Condition Fields:</label>
+                                                    <table id="ConditionTable" border="1">
+                                                        <tr>
+                                                            <th>Sl No</th>
+                                                            <th>Conditi On</th>
+                                                            <th>Conditi Name</th>
+                                                            <th>ConditionType</th>
+                                                            <th>TargetValues</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><i class="srno"></i></td>
+                                                            <td>
+                                                                <select class="search_type" name="select_one">
+                                                                    <option value="">Select</option>
+                                                                    <option value="activityInstanceType">ActivityInstanceType</option>
+                                                                    <option value="state">State</option>
+                                                                    <option value="IsNewActivity">IsNewActivity</option>
+                                                                    <option value="ETA">ETA</option>
+                                                                    <option value="AssignedTo">AssignedTo</option>
+                                                                    <option value="LastMessage">LastMessage</option>
+                                                                    <option value="ActivityName">ActivityName</option>
+                                                                    <option value="ParentActivityGuid">ParentActivityGuid</option>
+                                                                    <option value="HasInstanceChanged">HasInstanceChanged</option>
+                                                                </select>
+                                                            </td>
+                                                            <td></td>
+                                                            <td>
+                                                                <select name="select_two" class="select_two" onchange="AddDynamicProperties(this.value)">
+                                                                    <option value="">Select</option>
+                                                                    <option value="equal">equal</option>
+                                                                    <option value="notequal">notequal</option>
+                                                                    <option value="greaterthan">greaterthan</option>
+                                                                </select>
+                                                            </td>
+
+                                                            <td><input type="text" class='targetValue' size="8" /></td>
+
+                                                            <td>
+                                                                <button type="button" onclick="deleteRow(this,'ConditionField')">-</button>
+                                                                <button type="button" onclick="insRow()">+</button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    
+                                                    
+                                                    
+ <script type='text/javascript'>
+
+    function deleteRow(row,field) {
+        if (field === 'ConditionField') {
+             var table = document.getElementById('ConditionTable');
+        }
+           
+        if (field === 'FilterField') {
+             var table = document.getElementById('FilterTable');
+        }
+          
+        var rowCount = table.rows.length;
+        var i = row.parentNode.parentNode.rowIndex;
+        if (rowCount > 2) {
+            if (field === 'ConditionField') {
+                 document.getElementById('ConditionTable').deleteRow(i);
+            }
+            if (field === 'FilterField') {
+                document.getElementById('FilterTable').deleteRow(i);
+            }
+        }
+        
+    }
+    function insRow() {
+
+        var x = document.getElementById('ConditionTable');
+        var new_row = x.rows[1].cloneNode(true);
+        var len = x.rows.length;
+       // new_row.cells[0].innerHTML = len; //auto increment the srno
+        var inp1 = new_row.cells[1].getElementsByTagName('select')[0];
+        inp1.id += len;
+        inp1.value = '';
+        new_row.cells[2].innerHTML = '';
+        new_row.cells[4].getElementsByTagName('input')[0].value = "";
+        x.appendChild(new_row);
+    }
+
+     function insFilterRow() {
+ 
+         var x = document.getElementById('FilterTable');
+         console.log('filter application',x)
+         var new_row = x.rows[1].cloneNode(true);
+         console.log('filter new_row',new_row)
+          
+        new_row.cells[1].innerHTML = '';
+        new_row.cells[2].getElementsByTagName('input')[0].value = "";
+        x.appendChild(new_row);
+    }
+</script>
+
+
+
+while save funtioncal following
+
+
+        var ConditionOn = ''
+        var ConditionType = ''
+        var TargetValues=''
+        $('#ConditionTable tr').each(function (row, data) {
+            
+            if (row > 0) {
+                var comma = row == 1 ? '' : ',';
+                ConditionOn = ConditionOn + comma + $(data).find('td:eq(2)').text();
+                ConditionType = ConditionType + comma + $('.select_two', data).val();
+                TargetValues = TargetValues + comma + $('.targetValue', data).val();  
+            }
+  
+      });
+
+      var FilterName = ''
+        var FilterValue = ''
+        
+        $('#FilterTable tr').each(function (row, data) {
+   
+            if (row > 0) {
+                var comma = row == 1 ? '' : ',';
+                FilterName = FilterName + comma + $(data).find('td:eq(1)').text();
+                FilterValue = FilterValue + comma + $('.FilterValues', data).val();  
+            }
+ 
+      });
+        console.log("FilterName", FilterName);
+         console.log("FilterValue",FilterValue)
