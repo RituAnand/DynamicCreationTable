@@ -1,0 +1,12 @@
+body {
+    counter-reset: section;
+}
+
+i.srno {
+    counter-reset: subsection;
+}
+
+    i.srno:before {
+        counter-increment: section;
+        content: counter(section);
+    }
